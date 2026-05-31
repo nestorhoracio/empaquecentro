@@ -1,0 +1,91 @@
+# ============================================================
+# Decap CMS — Centro Empaque
+# Documentación: https://decapcms.org/docs/
+# ============================================================
+
+backend:
+  name: git-gateway
+  branch: main
+
+# Carpeta donde se guardan las imágenes subidas desde el CMS
+media_folder: "public/images/productos"
+# Ruta pública de esas imágenes
+public_folder: "/images/productos"
+
+# Idioma del panel
+locale: es
+
+collections:
+
+  # ── PRODUCTOS ──────────────────────────────────────────────
+  - name: "productos"
+    label: "Productos"
+    label_singular: "Producto"
+    folder: "src/content/productos"
+    create: true
+    delete: true
+    slug: "{{slug}}"       # nombre del archivo = slug del nombre
+    extension: "md"
+    format: "frontmatter"
+    summary: "{{fields.nombre}} — {{fields.categoria}}"
+
+    fields:
+      - label: "Nombre del producto"
+        name: "nombre"
+        widget: "string"
+        hint: "Nombre corto y claro. Ej: Bolsa kraft con manija"
+
+      - label: "Categoría"
+        name: "categoria"
+        widget: "select"
+        options:
+          - { label: "Bolsas",       value: "Bolsas" }
+          - { label: "Cajas",        value: "Cajas" }
+          - { label: "Repostería",   value: "Repostería" }
+          - { label: "Presentación", value: "Presentación" }
+          - { label: "Decoración",   value: "Decoración" }
+          - { label: "Fiesta",       value: "Fiesta" }
+          - { label: "Otro",         value: "Otro" }
+        hint: "Si necesitás una categoría nueva avisale a Néstor"
+
+      - label: "Descripción"
+        name: "descripcion"
+        widget: "text"
+        hint: "2-3 oraciones describiendo el producto. Sin precios."
+
+      - label: "Imagen"
+        name: "imagen"
+        widget: "image"
+        hint: "Foto del producto. Tamaño recomendado: 800x600px"
+        media_folder: "/public/images/productos"
+        public_folder: "/images/productos"
+
+      - label: "Usos sugeridos"
+        name: "usos"
+        widget: "list"
+        default: []
+        hint: "Escribí un uso por línea. Ej: Repostería / Cumpleaños / Regalos"
+
+      - label: "Disponible por mayor"
+        name: "mayorista"
+        widget: "boolean"
+        default: false
+        hint: "Activar si también se vende en cantidad mayorista"
+
+      - label: "Orden en el catálogo"
+        name: "orden"
+        widget: "number"
+        default: 99
+        hint: "Número más bajo = aparece primero. Los destacados van del 1 al 4."
+
+      - label: "Producto activo"
+        name: "activo"
+        widget: "boolean"
+        default: true
+        hint: "Desactivar para ocultar del catálogo sin borrar"
+
+      - label: "Texto alternativo de imagen (Alt)"
+        name: "imagenAlt"
+        widget: "string"
+        required: false
+        hint: "Describe la imagen para accesibilidad. Ej: Bolsa kraft con manija marrón sobre fondo blanco"

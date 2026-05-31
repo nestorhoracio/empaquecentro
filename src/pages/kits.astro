@@ -1,0 +1,177 @@
+---
+// src/pages/kits.astro
+import Layout from '../layouts/Layout.astro';
+import AsesorIA from '../components/AsesorIA.astro';
+
+const kits = [
+  {
+    id: 'reposteria',
+    emoji: '🎂',
+    titulo: 'Kit Repostería',
+    desc: 'Para torterías, pastelerías y reposteras artesanales.',
+    productos: ['Cajas para torta', 'Papel tissue', 'Cintas decorativas', 'Bolsas celofán'],
+    color: '#FFF3E0',
+    colorBorder: '#F97316',
+  },
+  {
+    id: 'boutique',
+    emoji: '👗',
+    titulo: 'Kit Boutique',
+    desc: 'Para tiendas de ropa y accesorios.',
+    productos: ['Bolsas kraft con manija', 'Papel tissue de colores', 'Cinta satén', 'Stickers personalizados'],
+    color: '#FCE7F3',
+    colorBorder: '#EC4899',
+  },
+  {
+    id: 'cosmeticos',
+    emoji: '💄',
+    titulo: 'Kit Cosméticos',
+    desc: 'Para emprendedoras de cosmética y cuidado personal.',
+    productos: ['Cajas armables', 'Bolsas celofán', 'Papel tissue', 'Lacitos decorativos'],
+    color: '#F0FDF4',
+    colorBorder: '#22C55E',
+  },
+  {
+    id: 'regaleria',
+    emoji: '🎁',
+    titulo: 'Kit Regalería',
+    desc: 'Para tiendas de regalos y detalles especiales.',
+    productos: ['Cajas con tapa', 'Papel de regalo', 'Cintas y lacitos', 'Cotillón'],
+    color: '#EFF6FF',
+    colorBorder: '#3B82F6',
+  },
+];
+
+const WA_NUMBER = '59899474094';
+---
+
+<Layout title="Kits por rubro" description="Armá tu kit de empaques ideal según tu tipo de negocio — Centro Empaque Uruguay.">
+
+  <section class="section--soft" style="padding-block:var(--space-16) var(--space-12)">
+    <div class="container" style="text-align:center;max-width:640px;margin-inline:auto">
+      <span class="badge badge--primary">Kits por rubro</span>
+      <h1 class="heading-display heading-lg" style="margin-top:var(--space-3)">
+        ¿Qué tipo de negocio tenés?
+      </h1>
+      <p style="margin-top:var(--space-4);color:var(--color-text-muted);font-size:var(--text-lg);line-height:1.7">
+        Elegí tu rubro y te mostramos los productos que más usan negocios como el tuyo.
+        Después te conectamos directo por WhatsApp para armar tu pedido.
+      </p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="kits-grid">
+        {kits.map(kit => (
+          <div class="kit-card" style={`--kit-color:${kit.color};--kit-border:${kit.colorBorder}`}>
+            <span class="kit-card__emoji" aria-hidden="true">{kit.emoji}</span>
+            <h2 class="kit-card__title">{kit.titulo}</h2>
+            <p class="kit-card__desc">{kit.desc}</p>
+            <ul class="kit-card__lista">
+              {kit.productos.map(prod => (
+                <li>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" aria-hidden="true">
+                    <polyline points="20 6 9 17 4 12"/>
+                  </svg>
+                  {prod}
+                </li>
+              ))}
+            </ul>
+            <a
+              href={`https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(`Hola! Me interesa el *${kit.titulo}*. ¿Pueden asesorarme? 😊`)}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="btn btn-whatsapp kit-card__cta"
+            >
+              Quiero este kit
+            </a>
+          </div>
+        ))}
+      </div>
+
+      <!-- Asesor IA Empaquetito -->
+      <AsesorIA />
+
+    </div>
+  </section>
+
+</Layout>
+
+<style>
+  .kits-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-6);
+    margin-bottom: var(--space-16);
+  }
+
+  .kit-card {
+    background: var(--kit-color, var(--color-bg-soft));
+    border: 2px solid var(--kit-border, var(--color-border));
+    border-radius: var(--radius-xl);
+    padding: var(--space-8);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    transition: transform var(--transition-base), box-shadow var(--transition-base);
+  }
+
+  .kit-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+  }
+
+  .kit-card__emoji {
+    font-size: 2.5rem;
+    display: block;
+  }
+
+  .kit-card__title {
+    font-family: var(--font-display);
+    font-size: var(--text-2xl);
+  }
+
+  .kit-card__desc {
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+  }
+
+  .kit-card__lista {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    flex: 1;
+  }
+
+  .kit-card__lista li {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-size: var(--text-sm);
+    color: var(--color-text);
+  }
+
+  .kit-card__lista svg {
+    flex-shrink: 0;
+    color: var(--kit-border, var(--color-primary));
+  }
+
+  .kit-card__cta {
+    margin-top: var(--space-2);
+    justify-content: center;
+  }
+
+  .asesor-placeholder {
+    background: var(--color-primary-soft);
+    border: 2px dashed var(--color-primary);
+    border-radius: var(--radius-xl);
+    padding: var(--space-12);
+    text-align: center;
+    opacity: 0.7;
+  }
+
+  @media (max-width: 768px) {
+    .kits-grid { grid-template-columns: 1fr; }
+  }
+</style>

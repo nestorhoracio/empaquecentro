@@ -1,0 +1,25 @@
+# Build output
+dist/
+.output/
+
+# Astro generated types
+.astro/
+
+# Dependencias
+node_modules/
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
+
+# Variables de entorno — NUNCA subir al repo
+.env
+.env.local
+.env.production
+
+# macOS
+.DS_Store
+
+# Netlify
+.netlify/

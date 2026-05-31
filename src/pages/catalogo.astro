@@ -1,0 +1,106 @@
+---
+import Layout from '../layouts/Layout.astro';
+import ProductCard from '../components/ProductCard.astro';
+import { getCollection } from 'astro:content';
+
+const todos = await getCollection('productos', ({ data }) => data.activo);
+const productos = todos.sort((a, b) => a.data.orden - b.data.orden);
+const categorias = ['Todas', ...new Set(productos.map(p => p.data.categoria))];
+---
+
+<Layout
+  title="Catálogo"
+  description="Catálogo completo de Centro Empaque — bolsas, cajas, papel tissue, cotillón y más."
+>
+
+  <section class="cat-hero section--soft">
+    <div class="container">
+      <span class="badge badge--primary">Catálogo completo</span>
+      <h1 class="heading-display heading-lg" style="margin-top:var(--space-3)">
+        Todos nuestros productos
+      </h1>
+      <p class="cat-hero__desc">
+        Filtrá por categoría o consultá por WhatsApp si no encontrás lo que buscás.
+      </p>
+      <div class="cat-filters" role="group" aria-label="Filtrar por categoría">
+        {categorias.map(cat => (
+          <button
+            class={`cat-filter-btn ${cat === 'Todas' ? 'cat-filter-btn--active' : ''}`}
+            data-categoria={cat}
+          >
+            {cat}
+          </button>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="products-grid" id="products-grid">
+        {productos.map(p => (
+          <div class="product-item" data-categoria={p.data.categoria}>
+            <ProductCard
+              nombre={p.data.nombre}
+              categoria={p.data.categoria}
+              descripcion={p.data.descripcion}
+              imagen={p.data.imagen}
+              imagenAlt={p.data.imagenAlt}
+              usos={p.data.usos}
+              mayorista={p.data.mayorista}
+            />
+          </div>
+        ))}
+      </div>
+      <div class="cat-empty" id="cat-empty" style="display:none">
+        <p>No hay productos en esta categoría todavía.</p>
+        <a href="https://wa.me/59899474094" target="_blank" class="btn btn-whatsapp" style="margin-top:var(--space-4)">
+          Consultá por WhatsApp
+        </a>
+      </div>
+    </div>
+  </section>
+
+</Layout>
+
+<style>
+  .cat-hero { padding-block: var(--space-12) var(--space-8); border-bottom: 1px solid var(--color-border); }
+  .cat-hero__desc { margin-top: var(--space-4); font-size: var(--text-lg); color: var(--color-text-muted); max-width: 600px; line-height: 1.7; }
+  .cat-filters { display: flex; flex-wrap: wrap; gap: var(--space-2); margin-top: var(--space-6); }
+  .cat-filter-btn {
+    padding: var(--space-2) var(--space-5);
+    border-radius: var(--radius-full);
+    border: 2px solid var(--color-border);
+    background: var(--color-bg);
+    color: var(--color-text-muted);
+    font-family: var(--font-body);
+    font-weight: 600;
+    font-size: var(--text-sm);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+  }
+  .cat-filter-btn:hover { border-color: var(--color-primary); color: var(--color-primary); }
+  .cat-filter-btn--active { background: var(--color-primary); border-color: var(--color-primary); color: #fff; }
+  .cat-empty { text-align: center; padding-block: var(--space-16); color: var(--color-text-muted); }
+</style>
+
+<script>
+  const filterBtns   = document.querySelectorAll('.cat-filter-btn');
+  const productItems = document.querySelectorAll('.product-item');
+  const emptyMsg     = document.getElementById('cat-empty');
+
+  filterBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const cat = btn.dataset.categoria ?? 'Todas';
+      filterBtns.forEach(b => b.classList.remove('cat-filter-btn--active'));
+      btn.classList.add('cat-filter-btn--active');
+      let visibles = 0;
+      productItems.forEach(item => {
+        const match = cat === 'Todas' || item.dataset.categoria === cat;
+        item.style.display = match ? '' : 'none';
+        if (match) visibles++;
+      });
+      if (emptyMsg) emptyMsg.style.display = visibles === 0 ? 'block' : 'none';
+    });
+  });
+</script>

@@ -1,0 +1,481 @@
+---
+// src/components/EmpaquecitoBubble.astro
+const WA_NUMBER = '59899474094';
+---
+
+<!-- Botón flotante -->
+<button
+  id="eq-bubble"
+  class="eq-bubble"
+  aria-label="Hablar con Empaquecito"
+  aria-expanded="false"
+>
+  <span class="eq-bubble__avatar" aria-hidden="true">🐾</span>
+  <span class="eq-bubble__label">¿Qué empaque necesitás?</span>
+  <span class="eq-bubble__close" aria-hidden="true">✕</span>
+</button>
+
+<!-- Panel de chat -->
+<div class="eq-panel" id="eq-panel" aria-hidden="true" role="dialog" aria-label="Chat con Empaquecito">
+
+  <div class="eq-panel__header">
+    <div class="eq-panel__info">
+      <div class="eq-panel__avatar" aria-hidden="true">🐾</div>
+      <div>
+        <p class="eq-panel__name">Empaquecito</p>
+        <p class="eq-panel__status">
+          <span class="eq-panel__dot"></span> En línea
+        </p>
+      </div>
+    </div>
+    <button class="eq-panel__close-btn" id="eq-close" aria-label="Cerrar chat">✕</button>
+  </div>
+
+  <div class="eq-panel__messages" id="eq-messages" aria-live="polite"></div>
+
+  <div class="eq-panel__footer">
+    <input
+      type="text"
+      id="eq-input"
+      class="eq-panel__input"
+      placeholder="Escribí tu consulta..."
+      autocomplete="off"
+      maxlength="300"
+      aria-label="Mensaje para Empaquecito"
+    />
+    <button id="eq-send" class="eq-panel__send" aria-label="Enviar">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+        <line x1="22" y1="2" x2="11" y2="13"/>
+        <polygon points="22 2 15 22 11 13 2 9 22 2"/>
+      </svg>
+    </button>
+  </div>
+
+</div>
+
+<style>
+  /* ── Botón flotante ───────────────────────────────────── */
+  .eq-bubble {
+    position: fixed;
+    bottom: var(--space-8);
+    left: var(--space-6);
+    z-index: var(--z-whatsapp);
+
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+
+    background: var(--color-primary);
+    color: #fff;
+    border: none;
+    border-radius: var(--radius-full);
+    padding: var(--space-3) var(--space-5);
+    cursor: pointer;
+    box-shadow: var(--shadow-blue);
+
+    font-family: var(--font-body);
+    font-weight: 700;
+    font-size: var(--text-sm);
+
+    transition: all var(--transition-base);
+  }
+
+  .eq-bubble:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 28px rgba(22,72,200,0.4);
+  }
+
+  .eq-bubble__avatar {
+    font-size: 1.25rem;
+    line-height: 1;
+  }
+
+  .eq-bubble__close {
+    display: none;
+    font-size: var(--text-sm);
+    opacity: 0.8;
+  }
+
+  /* Estado abierto */
+  .eq-bubble.is-open .eq-bubble__label { display: none; }
+  .eq-bubble.is-open .eq-bubble__close { display: inline; }
+  .eq-bubble.is-open { padding: var(--space-3) var(--space-4); }
+
+  /* ── Panel ────────────────────────────────────────────── */
+  .eq-panel {
+    position: fixed;
+    bottom: calc(var(--space-8) + 56px + var(--space-3));
+    left: var(--space-6);
+    z-index: var(--z-whatsapp);
+
+    width: 320px;
+    max-height: 440px;
+    background: var(--color-bg);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-lg), 0 0 0 1px var(--color-border);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+
+    /* Animación */
+    opacity: 0;
+    transform: translateY(12px) scale(0.97);
+    pointer-events: none;
+    transition: opacity var(--transition-base), transform var(--transition-base);
+    transform-origin: bottom left;
+  }
+
+  .eq-panel.is-open {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    pointer-events: all;
+  }
+
+  /* Header del panel */
+  .eq-panel__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--space-4) var(--space-5);
+    background: var(--color-primary);
+    color: #fff;
+    flex-shrink: 0;
+  }
+
+  .eq-panel__info {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+  }
+
+  .eq-panel__avatar {
+    font-size: 1.5rem;
+    width: 36px;
+    height: 36px;
+    background: rgba(255,255,255,0.2);
+    border-radius: var(--radius-full);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .eq-panel__name {
+    font-weight: 700;
+    font-size: var(--text-sm);
+    font-family: var(--font-display);
+  }
+
+  .eq-panel__status {
+    display: flex;
+    align-items: center;
+    gap: var(--space-1);
+    font-size: var(--text-xs);
+    opacity: 0.85;
+    margin-top: 2px;
+  }
+
+  .eq-panel__dot {
+    width: 6px;
+    height: 6px;
+    background: #4ade80;
+    border-radius: var(--radius-full);
+    animation: pulse-dot 2s infinite;
+  }
+
+  @keyframes pulse-dot {
+    0%, 100% { opacity: 1; }
+    50%       { opacity: 0.4; }
+  }
+
+  .eq-panel__close-btn {
+    background: rgba(255,255,255,0.15);
+    border: none;
+    color: #fff;
+    width: 28px;
+    height: 28px;
+    border-radius: var(--radius-full);
+    cursor: pointer;
+    font-size: var(--text-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background var(--transition-fast);
+  }
+
+  .eq-panel__close-btn:hover { background: rgba(255,255,255,0.25); }
+
+  /* Mensajes */
+  .eq-panel__messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: var(--space-4);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    scroll-behavior: smooth;
+  }
+
+  /* Input */
+  .eq-panel__footer {
+    display: flex;
+    gap: var(--space-2);
+    padding: var(--space-3) var(--space-4);
+    border-top: 1px solid var(--color-border);
+    flex-shrink: 0;
+    background: var(--color-bg);
+  }
+
+  .eq-panel__input {
+    flex: 1;
+    padding: var(--space-2) var(--space-3);
+    border: 1.5px solid var(--color-border);
+    border-radius: var(--radius-full);
+    font-family: var(--font-body);
+    font-size: var(--text-sm);
+    background: var(--color-bg);
+    color: var(--color-text);
+    outline: none;
+    transition: border-color var(--transition-fast);
+  }
+
+  .eq-panel__input:focus { border-color: var(--color-primary); }
+
+  .eq-panel__send {
+    background: var(--color-primary);
+    color: #fff;
+    border: none;
+    border-radius: var(--radius-full);
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: background var(--transition-fast);
+  }
+
+  .eq-panel__send:hover { background: var(--color-primary-dark); }
+  .eq-panel__send:disabled { opacity: 0.5; cursor: not-allowed; }
+
+  /* Mensajes — clases generadas por JS */
+  :global(.eq-msg) {
+    display: flex;
+    gap: var(--space-2);
+    animation: fadein 0.2s ease;
+  }
+
+  @keyframes fadein {
+    from { opacity: 0; transform: translateY(4px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  :global(.eq-msg--bot)  { align-self: flex-start; max-width: 85%; }
+  :global(.eq-msg--user) { align-self: flex-end; flex-direction: row-reverse; max-width: 85%; }
+
+  :global(.eq-msg__bubble) {
+    padding: var(--space-2) var(--space-3);
+    border-radius: var(--radius-lg);
+    font-size: var(--text-xs);
+    line-height: 1.6;
+  }
+
+  :global(.eq-msg--bot .eq-msg__bubble) {
+    background: var(--color-bg-soft);
+    border: 1px solid var(--color-border);
+    border-bottom-left-radius: 4px;
+    color: var(--color-text);
+  }
+
+  :global(.eq-msg--user .eq-msg__bubble) {
+    background: var(--color-primary);
+    color: #fff;
+    border-bottom-right-radius: 4px;
+  }
+
+  :global(.eq-msg__ico) {
+    font-size: 1rem;
+    align-self: flex-end;
+    flex-shrink: 0;
+  }
+
+  /* Typing dots */
+  :global(.eq-typing) {
+    display: flex;
+    gap: 4px;
+    align-items: center;
+    padding: var(--space-2) var(--space-3);
+  }
+
+  :global(.eq-dot) {
+    width: 6px;
+    height: 6px;
+    background: var(--color-text-muted);
+    border-radius: var(--radius-full);
+    animation: bounce 1.2s infinite;
+  }
+  :global(.eq-dot:nth-child(2)) { animation-delay: .2s; }
+  :global(.eq-dot:nth-child(3)) { animation-delay: .4s; }
+
+  @keyframes bounce {
+    0%, 60%, 100% { transform: translateY(0); }
+    30%           { transform: translateY(-5px); }
+  }
+
+  /* Botón WA dentro del chat */
+  :global(.eq-wa) {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-1);
+    margin-top: var(--space-2);
+    padding: 4px var(--space-3);
+    background: #25D366;
+    color: #fff;
+    border-radius: var(--radius-full);
+    font-size: 11px;
+    font-weight: 700;
+    text-decoration: none;
+  }
+
+  /* Responsive — en mobile queda full width abajo */
+  @media (max-width: 480px) {
+    .eq-panel {
+      left: var(--space-3);
+      right: var(--space-3);
+      width: auto;
+      bottom: calc(60px + var(--space-4));
+    }
+    .eq-bubble {
+      left: var(--space-4);
+      bottom: var(--space-5);
+    }
+  }
+</style>
+
+<script define:vars={{ WA_NUMBER }}>
+  const bubble   = document.getElementById('eq-bubble');
+  const panel    = document.getElementById('eq-panel');
+  const closeBtn = document.getElementById('eq-close');
+  const input    = document.getElementById('eq-input');
+  const sendBtn  = document.getElementById('eq-send');
+  const messages = document.getElementById('eq-messages');
+
+  const history = [];
+  let greeted   = false;
+
+  // ── Toggle ───────────────────────────────────────────────
+  function openPanel() {
+    panel.classList.add('is-open');
+    bubble.classList.add('is-open');
+    bubble.setAttribute('aria-expanded', 'true');
+    panel.removeAttribute('aria-hidden');
+    if (!greeted) {
+      greeted = true;
+      setTimeout(() => addMsg('bot', '¡Hola! Soy Empaquecito 🐾 ¿Para qué tipo de producto necesitás el empaque?'), 300);
+    }
+    setTimeout(() => input.focus(), 350);
+  }
+
+  function closePanel() {
+    panel.classList.remove('is-open');
+    bubble.classList.remove('is-open');
+    bubble.setAttribute('aria-expanded', 'false');
+    panel.setAttribute('aria-hidden', 'true');
+  }
+
+  bubble.addEventListener('click', () => {
+    panel.classList.contains('is-open') ? closePanel() : openPanel();
+  });
+  closeBtn.addEventListener('click', closePanel);
+
+  // ── Mensajes ─────────────────────────────────────────────
+  function scrollBottom() {
+    messages.scrollTop = messages.scrollHeight;
+  }
+
+  function addMsg(role, text) {
+    const isBot = role === 'bot';
+    const div   = document.createElement('div');
+    div.className = `eq-msg eq-msg--${isBot ? 'bot' : 'user'}`;
+
+    let waBtn = '';
+    const waMatch = text.match(/\[WA:([^\]]+)\]/);
+    if (waMatch) {
+      const prod = waMatch[1].trim();
+      const msg  = encodeURIComponent(`Hola! Empaquecito me recomendó: *${prod}*. ¿Tienen disponibilidad?`);
+      waBtn = `<a href="https://wa.me/${WA_NUMBER}?text=${msg}" target="_blank" rel="noopener noreferrer" class="eq-wa">
+        WhatsApp →
+      </a>`;
+      text = text.replace(/\[WA:[^\]]+\]/, '').trim();
+    }
+
+    div.innerHTML = `
+      ${isBot ? '<span class="eq-msg__ico">🐾</span>' : ''}
+      <div class="eq-msg__bubble">${text}${waBtn}</div>
+      ${!isBot ? '<span class="eq-msg__ico">😊</span>' : ''}
+    `;
+    messages.appendChild(div);
+    scrollBottom();
+  }
+
+  function showTyping() {
+    const d = document.createElement('div');
+    d.className = 'eq-msg eq-msg--bot';
+    d.id = 'eq-typing';
+    d.innerHTML = `<span class="eq-msg__ico">🐾</span>
+      <div class="eq-msg__bubble eq-typing">
+        <span class="eq-dot"></span><span class="eq-dot"></span><span class="eq-dot"></span>
+      </div>`;
+    messages.appendChild(d);
+    scrollBottom();
+  }
+
+  function hideTyping() { document.getElementById('eq-typing')?.remove(); }
+
+  function setLoading(v) {
+    sendBtn.disabled = v;
+    input.disabled   = v;
+  }
+
+  // ── API ──────────────────────────────────────────────────
+  async function ask(userText) {
+    history.push({ role: 'user', content: userText });
+    setLoading(true);
+    showTyping();
+
+    try {
+      const res  = await fetch('/api/empaquecito', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ messages: history }),
+      });
+      const data = await res.json();
+      if (data.error) throw new Error(data.error);
+
+      const reply = data.content?.[0]?.text ?? 'No pude procesar tu consulta.';
+      history.push({ role: 'assistant', content: reply });
+      hideTyping();
+      addMsg('bot', reply);
+    } catch {
+      hideTyping();
+      addMsg('bot', 'Sin conexión. Escribinos directo por WhatsApp 😊');
+    } finally {
+      setLoading(false);
+      input.focus();
+    }
+  }
+
+  // ── Eventos ──────────────────────────────────────────────
+  function handleSend() {
+    const text = input.value.trim();
+    if (!text) return;
+    addMsg('user', text);
+    input.value = '';
+    ask(text);
+  }
+
+  sendBtn.addEventListener('click', handleSend);
+  input.addEventListener('keydown', e => {
+    if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleSend(); }
+  });
+</script>

@@ -1,0 +1,54 @@
+---
+// src/pages/nosotros.astro
+import Layout from '../layouts/Layout.astro';
+---
+<Layout title="Nosotros" description="Conocé el equipo de Centro Empaque — distribuidora de insumos para comercios en Uruguay.">
+
+  <section class="section--soft" style="padding-block:var(--space-16)">
+    <div class="container" style="max-width:760px">
+      <span class="badge badge--primary">Quiénes somos</span>
+      <h1 class="heading-display heading-lg" style="margin-top:var(--space-3)">
+        El equipo detrás de Centro Empaque
+      </h1>
+      <p style="margin-top:var(--space-5);font-size:var(--text-lg);color:var(--color-text-muted);line-height:1.8">
+        <!-- ← Completar con historia real del negocio y la dueña -->
+        Somos una distribuidora apasionada por ayudar a los comercios a presentar sus productos de la mejor manera.
+        Cada cliente importa, cada detalle cuenta.
+      </p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <!-- Placeholder para foto del equipo -->
+      <div style="
+        aspect-ratio:16/6;
+        background:var(--color-bg-soft);
+        border:2px dashed var(--color-border);
+        border-radius:var(--radius-xl);
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        color:var(--color-text-muted);
+        font-size:var(--text-sm);
+        margin-bottom:var(--space-16);
+      ">
+        📸 Foto del equipo / local
+      </div>
+
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:var(--space-8)">
+        {[
+          { num: '817+', label: 'Clientes en Instagram' },
+          { num: '∞',    label: 'Productos en stock' },
+          { num: '100%', label: 'Atención personalizada' },
+        ].map(s => (
+          <div style="text-align:center;padding:var(--space-8);background:var(--color-bg-soft);border-radius:var(--radius-lg)">
+            <p style="font-family:var(--font-display);font-size:var(--text-5xl);color:var(--color-primary)">{s.num}</p>
+            <p style="color:var(--color-text-muted);margin-top:var(--space-2)">{s.label}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+</Layout>

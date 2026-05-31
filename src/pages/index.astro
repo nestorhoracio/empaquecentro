@@ -1,0 +1,203 @@
+---
+import Layout from '../layouts/Layout.astro';
+import ProductCard from '../components/ProductCard.astro';
+import { getCollection } from 'astro:content';
+
+const todos = await getCollection('productos', ({ data }) => data.activo);
+const productosDestacados = todos
+  .sort((a, b) => a.data.orden - b.data.orden)
+  .slice(0, 4);
+
+const WA_NUMBER = '59899474094';
+const waLink    = `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent('Hola! Quiero consultar sobre sus productos 😊')}`;
+---
+
+<Layout
+  title="Inicio"
+  description="Centro Empaque — Distribuidora de insumos para comercios. Bolsas, cajas, papel, cotillón. Venta por mayor y menor en Uruguay."
+>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="container hero__inner">
+      <div class="hero__content">
+        <span class="badge badge--primary hero__badge">Distribuidora en Uruguay</span>
+        <h1 class="heading-display heading-xl hero__title">
+          Todo para presentar<br/>
+          <span class="hero__title-accent">tu producto</span><br/>
+          como merece
+        </h1>
+        <p class="hero__desc">
+          Bolsas, cajas, papel, cotillón y mucho más.<br />
+          Venta por <strong>mayor y menor</strong> · Alta calidad · Amplio stock
+        </p>
+        <div class="hero__actions">
+          <a href="/catalogo" class="btn btn-primary">Ver catálogo completo</a>
+          <a href={waLink} target="_blank" rel="noopener noreferrer" class="btn btn-whatsapp">
+            Consultar por WhatsApp
+          </a>
+        </div>
+      </div>
+      <div class="hero__image-wrap">
+        <img
+          src="https://placehold.co/800x600/1648C8/ffffff?text=Centro+Empaque"
+          alt="Interior del local de Centro Empaque distribuidora — amplio stock de empaques e insumos para comercios en Uruguay"
+          width="800"
+          height="600"
+          class="hero__img"
+          loading="eager"
+        />
+      </div>
+    </div>
+  </section>
+
+  <!-- PROPUESTA DE VALOR -->
+  <section class="section section--soft">
+    <div class="container">
+      <div class="features-grid">
+        {[
+          { icon: '🏪', title: 'Amplio stock',    desc: 'Miles de productos disponibles en nuestro local físico.' },
+          { icon: '🛒', title: 'Mayor y menor',   desc: 'Comprás desde una unidad hasta cantidad mayorista.' },
+          { icon: '⭐', title: 'Alta calidad',    desc: 'Solo trabajamos con proveedores de confianza.' },
+          { icon: '🚚', title: 'Delivery',        desc: 'Llevamos tu pedido directo a donde lo necesitás.' },
+        ].map(f => (
+          <div class="feature-card">
+            <span class="feature-card__icon" aria-hidden="true">{f.icon}</span>
+            <h3 class="feature-card__title">{f.title}</h3>
+            <p class="feature-card__desc">{f.desc}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- PRODUCTOS DESTACADOS -->
+  <section class="section">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="heading-display heading-lg">Productos destacados</h2>
+        <a href="/catalogo" class="btn btn-outline">Ver todos</a>
+      </div>
+      <div class="products-grid">
+        {productosDestacados.map(p => (
+          <ProductCard
+            nombre={p.data.nombre}
+            categoria={p.data.categoria}
+            descripcion={p.data.descripcion}
+            imagen={p.data.imagen}
+            imagenAlt={p.data.imagenAlt}
+            usos={p.data.usos}
+            mayorista={p.data.mayorista}
+          />
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- EMPAQUETITO TEASER -->
+  <section class="section section--primary">
+    <div class="container asesor-teaser">
+      <div class="asesor-teaser__text">
+        <span class="badge" style="background:rgba(255,255,255,0.2);color:#fff;">🐾 Nuevo</span>
+        <h2 class="heading-display heading-lg" style="color:#fff;margin-top:1rem;">
+          ¿No sabés qué empaque necesitás?
+        </h2>
+        <p style="color:rgba(255,255,255,0.85);font-size:var(--text-lg);margin-top:0.75rem;">
+          Empaquecito, nuestro asesor, te hace 3 preguntas y te recomienda
+          exactamente lo que va mejor para tu negocio.
+        </p>
+        <a href="/kits" class="btn btn-accent" style="margin-top:1.5rem;">
+          Encontrá tu empaque ideal →
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA FINAL -->
+  <section class="section">
+    <div class="container cta-section">
+      <h2 class="heading-display heading-lg">¿Listo para empezar?</h2>
+      <p>Escribinos por WhatsApp y te atendemos al instante.</p>
+      <a href={waLink} target="_blank" rel="noopener noreferrer" class="btn btn-whatsapp btn-lg">
+        Chatear ahora
+      </a>
+    </div>
+  </section>
+
+</Layout>
+
+<style>
+  .hero {
+    background: linear-gradient(135deg, var(--color-primary-soft) 0%, var(--color-bg) 60%);
+    padding-block: var(--space-20);
+    border-bottom: 1px solid var(--color-border);
+  }
+  .hero__inner {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-12);
+    align-items: center;
+  }
+  .hero__badge { margin-bottom: var(--space-4); }
+  .hero__title {
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    line-height: 1.05;
+    margin-bottom: var(--space-5);
+  }
+  .hero__title-accent { color: var(--color-primary); }
+  .hero__desc {
+    font-size: var(--text-lg);
+    color: var(--color-text-muted);
+    line-height: 1.7;
+    margin-bottom: var(--space-8);
+  }
+  .hero__actions { display: flex; gap: var(--space-4); flex-wrap: wrap; }
+  .hero__img {
+    width: 100%;
+    height: auto;
+    border-radius: var(--radius-xl);
+    object-fit: cover;
+    aspect-ratio: 4/3;
+  }
+  .hero__image-placeholder {
+    aspect-ratio: 4/3;
+    background: var(--color-bg-soft);
+    border: 2px dashed var(--color-border);
+    border-radius: var(--radius-xl);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-3);
+    color: var(--color-text-muted);
+    font-size: var(--text-sm);
+  }
+  .hero__image-placeholder span { font-size: 3rem; }
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--space-6);
+  }
+  .feature-card {
+    text-align: center;
+    padding: var(--space-8) var(--space-6);
+    background: var(--color-bg);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--color-border);
+  }
+  .feature-card__icon { font-size: 2.5rem; display: block; margin-bottom: var(--space-4); }
+  .feature-card__title { font-family: var(--font-display); font-size: var(--text-xl); margin-bottom: var(--space-2); }
+  .feature-card__desc { font-size: var(--text-sm); color: var(--color-text-muted); line-height: 1.6; }
+  .section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: var(--space-10); }
+  .asesor-teaser { max-width: 680px; margin-inline: auto; text-align: center; }
+  .cta-section { text-align: center; display: flex; flex-direction: column; align-items: center; gap: var(--space-5); }
+  .cta-section p { font-size: var(--text-lg); color: var(--color-text-muted); }
+  .btn-lg { padding: var(--space-4) var(--space-10); font-size: var(--text-lg); }
+  @media (max-width: 1024px) { .features-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 768px) {
+    .hero__inner { grid-template-columns: 1fr; }
+    .section-header { flex-direction: column; align-items: flex-start; gap: var(--space-4); }
+    .features-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 480px) { .features-grid { grid-template-columns: 1fr; } }
+</style>

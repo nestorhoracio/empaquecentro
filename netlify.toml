@@ -1,0 +1,12 @@
+[build]
+  command   = "npm run build"
+  publish   = "dist"
+
+[build.environment]
+  NODE_VERSION = "20"
+
+# Redirige rutas desconocidas a la 404 de Astro
+[[redirects]]
+  from   = "/*"
+  to     = "/404"
+  status = 404
