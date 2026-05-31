@@ -204,7 +204,7 @@ git branch
 
 ## 🔑 DATOS PARA COMPLETAR ANTES DEL PRIMER `git push`
 
-- [ ] Reemplazar `59899474094` con el número real de WhatsApp en:
+- [ ] Reemplazar `59898024132` con el número real de WhatsApp en:
   - `src/components/Header.astro`
   - `src/components/Footer.astro`
   - `src/components/WhatsAppButton.astro`
