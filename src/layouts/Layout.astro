@@ -45,6 +45,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 
     <title>{title} | Centro Empaque</title>
+    <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
   </head>
 
   <body>
@@ -57,5 +58,16 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
     <Footer />
     <WhatsAppButton />
     <EmpaquecitoBubble />
+    <script>
+  if (window.netlifyIdentity) {
+    window.netlifyIdentity.on("init", user => {
+      if (!user) {
+        window.netlifyIdentity.on("login", () => {
+          document.location.href = "/admin/";
+        });
+      }
+    });
+  }
+</script>
   </body>
 </html>
