@@ -59,6 +59,12 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
     <WhatsAppButton />
     <EmpaquecitoBubble />
     <script>
+  // Redirigir tokens de invitación y recuperación al /admin/ donde Decap los procesa
+  const hash = window.location.hash;
+  if (hash && (hash.includes('invite_token=') || hash.includes('recovery_token='))) {
+    window.location.replace('/admin/' + hash);
+  }
+
   if (window.netlifyIdentity) {
     window.netlifyIdentity.on("init", user => {
       if (!user) {
