@@ -50,7 +50,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
   (function() {
     var hash = window.location.hash;
     if (hash && (hash.includes('invite_token=') || hash.includes('recovery_token='))) {
-      window.location.replace('/admin/' + hash);
+      window.location.replace('/admin/' + hash.replace('#/', '#'));
     }
   })();
 </script>
