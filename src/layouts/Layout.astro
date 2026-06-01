@@ -45,7 +45,18 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 
     <title>{title} | Centro Empaque</title>
-    <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+    <!-- 1. Redirección de tokens ANTES de que cargue nada -->
+<script is:inline>
+  (function() {
+    var hash = window.location.hash;
+    if (hash && (hash.includes('invite_token=') || hash.includes('recovery_token='))) {
+      window.location.replace('/admin/' + hash);
+    }
+  })();
+</script>
+
+<!-- 2. Widget de Netlify Identity -->
+<script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
   </head>
 
   <body>
@@ -58,22 +69,5 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
     <Footer />
     <WhatsAppButton />
     <EmpaquecitoBubble />
-    <script>
-  // Redirigir tokens de invitación y recuperación al /admin/ donde Decap los procesa
-  const hash = window.location.hash;
-  if (hash && (hash.includes('invite_token=') || hash.includes('recovery_token='))) {
-    window.location.replace('/admin/' + hash);
-  }
-
-  if (window.netlifyIdentity) {
-    window.netlifyIdentity.on("init", user => {
-      if (!user) {
-        window.netlifyIdentity.on("login", () => {
-          document.location.href = "/admin/";
-        });
-      }
-    });
-  }
-</script>
-  </body>
+    </body>
 </html>
