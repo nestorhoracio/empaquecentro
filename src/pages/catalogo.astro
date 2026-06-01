@@ -89,13 +89,18 @@ const categorias = ['Todas', ...new Set(productos.map(p => p.data.categoria))];
   const productItems = document.querySelectorAll<HTMLElement>('.product-item');
   const emptyMsg     = document.getElementById('cat-empty');
 
+  console.log('Botones encontrados:', filterBtns.length);
+  console.log('Productos encontrados:', productItems.length);
+
   filterBtns.forEach(btn => {
     btn.addEventListener('click', () => {
       const cat = btn.dataset.categoria ?? 'Todas';
+      console.log('Click en categoría:', cat);
       filterBtns.forEach(b => b.classList.remove('cat-filter-btn--active'));
       btn.classList.add('cat-filter-btn--active');
       let visibles = 0;
       productItems.forEach(item => {
+        console.log('item categoria:', item.dataset.categoria, '| comparando con:', cat);
         const match = cat === 'Todas' || item.dataset.categoria === cat;
         item.style.display = match ? '' : 'none';
         if (match) visibles++;
