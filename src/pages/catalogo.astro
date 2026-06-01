@@ -85,8 +85,8 @@ const categorias = ['Todas', ...new Set(productos.map(p => p.data.categoria))];
 </style>
 
 <script>
-  const filterBtns   = document.querySelectorAll('.cat-filter-btn');
-  const productItems = document.querySelectorAll('.product-item');
+  const filterBtns   = document.querySelectorAll<HTMLButtonElement>('.cat-filter-btn');
+  const productItems = document.querySelectorAll<HTMLElement>('.product-item');
   const emptyMsg     = document.getElementById('cat-empty');
 
   filterBtns.forEach(btn => {
