@@ -46,6 +46,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 
     <title>{title} | Centro Empaque</title>
     <!-- 1. Redirección de tokens ANTES de que cargue nada -->
+<!-- Redirección de tokens de Identity a /admin/ -->
 <script is:inline>
   (function() {
     var hash = window.location.hash;
@@ -54,9 +55,6 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
     }
   })();
 </script>
-
-<!-- 2. Widget de Netlify Identity -->
-<script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
   </head>
 
   <body>
