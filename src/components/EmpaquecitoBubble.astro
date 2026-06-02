@@ -45,6 +45,29 @@ const WA_NUMBER = '59899474094';
 
   let history = [];
   let greeted = false;
+  let inactivityTimer = null;
+  const INACTIVITY_MS = 5 * 60 * 1000; // 5 minutos
+
+  // ─── Reset por inactividad ───────────────────────────────────────────────
+  function resetInactivityTimer() {
+    clearTimeout(inactivityTimer);
+    inactivityTimer = setTimeout(() => {
+      // Solo resetea si hay conversación iniciada
+      if (history.length > 0) {
+        history = [];
+        greeted = false;
+        messages.innerHTML = '';
+        // Mensaje de cierre suave antes de volver al saludo
+        addMsg('assistant', '¡Hasta luego! 👋 La conversación se reinició por inactividad. Si necesitás algo más, estoy acá.');
+        setTimeout(() => {
+          messages.innerHTML = '';
+          greeted = true;
+          addMsg('assistant', '¡Hola de nuevo! Soy Empaquecito 🐾 ¿En qué te puedo ayudar?');
+          history = [];
+        }, 3000);
+      }
+    }, INACTIVITY_MS);
+  }
 
   // ─── Panel open / close ──────────────────────────────────────────────────
   function openPanel() {
@@ -70,23 +93,43 @@ const WA_NUMBER = '59899474094';
   }
 
   // ─── API pública: abre con mensaje de contexto desde los kits ───────────
-  // Uso: window.Empaquecito.openWithContext("Hola, me interesa el Kit Repostería 🎂")
   window.Empaquecito = {
     openWithContext: function(contextMsg) {
-      // Si ya hubo conversación, reseteamos para el nuevo contexto
       if (history.length > 0) {
         history = [];
         greeted = false;
         messages.innerHTML = '';
       }
+      clearTimeout(inactivityTimer);
       openPanel();
-      // Pequeño delay para que la animación de apertura termine antes del saludo
       setTimeout(() => {
         addMsg('user', contextMsg);
         askEmpaquecito(contextMsg);
       }, 400);
     }
   };
+
+  // ─── Escalada a humano ───────────────────────────────────────────────────
+  // Detecta si el usuario pide hablar con una persona y abre WhatsApp directo
+  function checkHumanEscalation(text) {
+    const triggers = ['humano', 'persona', 'asesor real', 'hablar con alguien',
+                      'quiero hablar', 'me comuniques', 'comunicarme', 'vendedor',
+                      'empleado', 'no entiendo', 'no me ayuda'];
+    return triggers.some(t => text.toLowerCase().includes(t));
+  }
+
+  function escalateToHuman() {
+    // Arma resumen del historial para el mensaje de WhatsApp
+    const resumen = history
+      .filter(m => m.role === 'user')
+      .map(m => m.content)
+      .slice(-3) // últimos 3 mensajes del usuario
+      .join(' / ');
+    const waText = resumen
+      ? `Hola! Estuve chateando con Empaquecito y necesito ayuda de una persona. Esto es lo que consulté: "${resumen}"`
+      : `Hola! Estuve chateando con Empaquecito y me gustaría hablar con alguien del equipo.`;
+    window.open(`https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(waText)}`, '_blank', 'noopener,noreferrer');
+  }
 
   // ─── Mensajes ─────────────────────────────────────────────────────────────
   function addMsg(role, text) {
@@ -99,7 +142,8 @@ const WA_NUMBER = '59899474094';
 
     if (waMatch && role === 'assistant') {
       const productName = waMatch[1];
-      const waMsg = encodeURIComponent(`Hola! El asesor me recomendó ${productName}, ¿tienen disponibilidad?`);
+      // Detalle 1: la firma siempre es "Empaquecito te recomendó", no el nombre del usuario
+      const waMsg = encodeURIComponent(`Hola! Empaquecito me recomendó ${productName}, ¿tienen disponibilidad?`);
       const btn = document.createElement('a');
       btn.href = `https://wa.me/${WA_NUMBER}?text=${waMsg}`;
       btn.target = '_blank';
@@ -129,6 +173,7 @@ const WA_NUMBER = '59899474094';
 
   // ─── API call ─────────────────────────────────────────────────────────────
   async function askEmpaquecito(text) {
+    resetInactivityTimer();
     history.push({ role: 'user', content: text });
     showTyping();
     sendBtn.disabled = true;
@@ -166,6 +211,17 @@ const WA_NUMBER = '59899474094';
   function handleSend() {
     const text = input.value.trim();
     if (!text) return;
+    resetInactivityTimer();
+
+    // Detalle 3: escalada a humano — va directo a WhatsApp con el historial
+    if (checkHumanEscalation(text)) {
+      addMsg('user', text);
+      input.value = '';
+      addMsg('assistant', 'Entendido, te conecto ahora mismo con el equipo de Centro Empaque 👋');
+      setTimeout(() => escalateToHuman(), 600);
+      return;
+    }
+
     addMsg('user', text);
     input.value = '';
     askEmpaquecito(text);

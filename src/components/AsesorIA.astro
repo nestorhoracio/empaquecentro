@@ -37,6 +37,43 @@ const WA_NUMBER = '59899474094';
   const input = document.getElementById('asesor-input');
   const sendBtn = document.getElementById('asesor-send');
   let history = [];
+  let inactivityTimer = null;
+  const INACTIVITY_MS = 5 * 60 * 1000;
+
+  function resetInactivityTimer() {
+    clearTimeout(inactivityTimer);
+    inactivityTimer = setTimeout(() => {
+      if (history.length > 0) {
+        history = [];
+        chat.innerHTML = '';
+        addMsg('assistant', '¡Hasta luego! 👋 La conversación se reinició por inactividad. Si necesitás algo más, estoy acá.');
+        setTimeout(() => {
+          chat.innerHTML = '';
+          history = [];
+          addMsg('assistant', '¡Hola de nuevo! Soy Empaquecito 🐾 ¿En qué te puedo ayudar?');
+        }, 3000);
+      }
+    }, INACTIVITY_MS);
+  }
+
+  function checkHumanEscalation(text) {
+    const triggers = ['humano', 'persona', 'asesor real', 'hablar con alguien',
+                      'quiero hablar', 'me comuniques', 'comunicarme', 'vendedor',
+                      'empleado', 'no entiendo', 'no me ayuda'];
+    return triggers.some(t => text.toLowerCase().includes(t));
+  }
+
+  function escalateToHuman() {
+    const resumen = history
+      .filter(m => m.role === 'user')
+      .map(m => m.content)
+      .slice(-3)
+      .join(' / ');
+    const waText = resumen
+      ? `Hola! Estuve chateando con Empaquecito y necesito ayuda de una persona. Esto es lo que consulté: "${resumen}"`
+      : `Hola! Estuve chateando con Empaquecito y me gustaría hablar con alguien del equipo.`;
+    window.open(`https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(waText)}`, '_blank', 'noopener,noreferrer');
+  }
 
   function addMsg(role, text) {
     // Detectar marcador [WA:nombre producto]
@@ -49,7 +86,7 @@ const WA_NUMBER = '59899474094';
 
     if (waMatch && role === 'assistant') {
       const productName = waMatch[1];
-      const waMsg = encodeURIComponent(`Hola! El asesor me recomendó ${productName}, ¿tienen disponibilidad?`);
+      const waMsg = encodeURIComponent(`Hola! Empaquecito me recomendó ${productName}, ¿tienen disponibilidad?`);
       const btn = document.createElement('a');
       btn.href = `https://wa.me/${WA_NUMBER}?text=${waMsg}`;
       btn.target = '_blank';
@@ -78,6 +115,7 @@ const WA_NUMBER = '59899474094';
   }
 
   async function askEmpaquecito(text) {
+    resetInactivityTimer();
     history.push({ role: 'user', content: text });
     showTyping();
     sendBtn.disabled = true;
@@ -116,6 +154,16 @@ const WA_NUMBER = '59899474094';
   function handleSend() {
     const text = input.value.trim();
     if (!text) return;
+    resetInactivityTimer();
+
+    if (checkHumanEscalation(text)) {
+      addMsg('user', text);
+      input.value = '';
+      addMsg('assistant', 'Entendido, te conecto ahora mismo con el equipo de Centro Empaque 👋');
+      setTimeout(() => escalateToHuman(), 600);
+      return;
+    }
+
     addMsg('user', text);
     input.value = '';
     askEmpaquecito(text);
