@@ -3,55 +3,110 @@
    Paleta extraída de identidad visual del perfil IG
    ============================================ */
 
-@import url('https://fonts.googleapis.com/css2?family=Archivo+Black&family=Nunito:wght@400;500;600;700;800&display=swap');
+/* Gontserrat — local (SIL OFL 1.1, libre uso comercial) */
+@font-face {
+  font-family: 'Gontserrat';
+  src: url('/fonts/gontserrat/gontserrat-400.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Gontserrat';
+  src: url('/fonts/gontserrat/gontserrat-400-italic.woff2') format('woff2');
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Gontserrat';
+  src: url('/fonts/gontserrat/gontserrat-600.woff2') format('woff2');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Gontserrat';
+  src: url('/fonts/gontserrat/gontserrat-700.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Gontserrat';
+  src: url('/fonts/gontserrat/gontserrat-700-italic.woff2') format('woff2');
+  font-weight: 700;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Gontserrat';
+  src: url('/fonts/gontserrat/gontserrat-800.woff2') format('woff2');
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Gontserrat';
+  src: url('/fonts/gontserrat/gontserrat-900.woff2') format('woff2');
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
 
 :root {
   /* — Colores de marca — */
-  --color-primary:      #1648C8;   /* Azul institucional (uniformes, logo) */
-  --color-primary-dark: #0F35A0;   /* Azul oscuro (hover, texto sobre fondo claro) */
-  --color-primary-soft: #EEF2FF;   /* Azul muy suave (fondos alternativos) */
+  --color-primary: #1648C8;
+  --color-primary-dark: #0F35A0;
+  --color-primary-soft: #EEF2FF;
 
-  --color-secondary:    #22C55E;   /* Verde (fachada del local) */
-  --color-secondary-dark: #16A34A; /* Verde oscuro (hover) */
+  --color-secondary: #22C55E;
+  --color-secondary-dark: #16A34A;
 
-  --color-accent:       #FACC15;   /* Amarillo (CTAs festivos, destacados) */
-  --color-accent-dark:  #EAB308;   /* Amarillo oscuro (hover accent) */
+  --color-accent: #FACC15;
+  --color-accent-dark: #EAB308;
 
   /* — Neutros — */
-  --color-bg:           #E0F2F1;   /* Verde agua — paredes del local */
-  --color-bg-soft:      #C8E6E4;   /* Verde agua más oscuro para secciones alternadas */
-  --color-bg-dark:      #0F172A;   /* Fondo oscuro (footer) */
+  --color-bg: #E0F2F1;
+  --color-bg-soft: #C8E6E4;
+  --color-bg-dark: #0F172A;
 
-  --color-text:         #1A1612;   /* Texto principal cálido (no negro puro) */
-  --color-text-muted:   #6B6560;   /* Texto secundario cálido */
-  --color-text-light:   #D4CEBF;   /* Texto sobre fondos oscuros */
+  --color-text: #1A1612;
+  --color-text-muted: #6B6560;
+  --color-text-light: #D4CEBF;
 
-  --color-border:       #E5DFD6;   /* Borde cálido suave */
-  --color-border-focus: #1648C8;   /* Foco en inputs */
+  --color-border: #E5DFD6;
+  --color-border-focus: #1648C8;
 
   /* — Tipografía — */
-  --font-display: 'Archivo Black', sans-serif;  /* Títulos impactantes */
-  --font-body:    'Nunito', sans-serif;          /* Cuerpo legible y amigable */
+  --font-display: 'Gontserrat', sans-serif;
+  --font-body: 'Gontserrat', sans-serif;
 
-  --text-xs:   0.75rem;    /* 12px */
-  --text-sm:   0.875rem;   /* 14px */
-  --text-base: 1rem;       /* 16px */
-  --text-lg:   1.125rem;   /* 18px */
-  --text-xl:   1.25rem;    /* 20px */
-  --text-2xl:  1.5rem;     /* 24px */
-  --text-3xl:  1.875rem;   /* 30px */
-  --text-4xl:  2.25rem;    /* 36px */
-  --text-5xl:  3rem;       /* 48px */
-  --text-6xl:  3.75rem;    /* 60px */
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-base: 1rem;
+  --text-lg: 1.125rem;
+  --text-xl: 1.25rem;
+  --text-2xl: 1.5rem;
+  --text-3xl: 1.875rem;
+  --text-4xl: 2.25rem;
+  --text-5xl: 3rem;
+  --text-6xl: 3.75rem;
 
   /* — Espaciado — */
-  --space-1:  0.25rem;
-  --space-2:  0.5rem;
-  --space-3:  0.75rem;
-  --space-4:  1rem;
-  --space-5:  1.25rem;
-  --space-6:  1.5rem;
-  --space-8:  2rem;
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
   --space-10: 2.5rem;
   --space-12: 3rem;
   --space-16: 4rem;
@@ -63,26 +118,26 @@
   --container-pad: clamp(1rem, 5vw, 2rem);
 
   /* — Bordes — */
-  --radius-sm:  4px;
-  --radius-md:  8px;
-  --radius-lg:  16px;
-  --radius-xl:  24px;
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
   --radius-full: 9999px;
 
   /* — Sombras — */
-  --shadow-sm:  0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.06);
-  --shadow-md:  0 4px 12px rgba(0,0,0,0.10), 0 2px 6px rgba(0,0,0,0.06);
-  --shadow-lg:  0 10px 32px rgba(0,0,0,0.12), 0 4px 12px rgba(0,0,0,0.08);
-  --shadow-blue: 0 4px 20px rgba(22,72,200,0.25);
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.06);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.10), 0 2px 6px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 10px 32px rgba(0, 0, 0, 0.12), 0 4px 12px rgba(0, 0, 0, 0.08);
+  --shadow-blue: 0 4px 20px rgba(22, 72, 200, 0.25);
 
   /* — Transiciones — */
-  --transition-fast:   150ms ease;
-  --transition-base:   250ms ease;
-  --transition-slow:   400ms ease;
+  --transition-fast: 150ms ease;
+  --transition-base: 250ms ease;
+  --transition-slow: 400ms ease;
 
   /* — Z-index — */
-  --z-header:  100;
-  --z-modal:   200;
+  --z-header: 100;
+  --z-modal: 200;
   --z-tooltip: 300;
   --z-whatsapp: 90;
 }
@@ -91,7 +146,9 @@
    RESET Y BASE
    ============================================ */
 
-*, *::before, *::after {
+*,
+*::before,
+*::after {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
@@ -112,7 +169,8 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-img, video {
+img,
+video {
   max-width: 100%;
   height: auto;
   display: block;
@@ -130,7 +188,8 @@ button {
   font-family: inherit;
 }
 
-ul, ol {
+ul,
+ol {
   list-style: none;
 }
 
@@ -170,10 +229,21 @@ ul, ol {
   letter-spacing: -0.02em;
 }
 
-.heading-xl { font-size: var(--text-5xl); }
-.heading-lg { font-size: var(--text-4xl); }
-.heading-md { font-size: var(--text-3xl); }
-.heading-sm { font-size: var(--text-2xl); }
+.heading-xl {
+  font-size: var(--text-5xl);
+}
+
+.heading-lg {
+  font-size: var(--text-4xl);
+}
+
+.heading-md {
+  font-size: var(--text-3xl);
+}
+
+.heading-sm {
+  font-size: var(--text-2xl);
+}
 
 /* Botones */
 .btn {
@@ -195,16 +265,18 @@ ul, ol {
   color: #fff;
   box-shadow: var(--shadow-blue);
 }
+
 .btn-primary:hover {
   background-color: var(--color-primary-dark);
   transform: translateY(-2px);
-  box-shadow: 0 6px 24px rgba(22,72,200,0.35);
+  box-shadow: 0 6px 24px rgba(22, 72, 200, 0.35);
 }
 
 .btn-accent {
   background-color: var(--color-accent);
   color: var(--color-text);
 }
+
 .btn-accent:hover {
   background-color: var(--color-accent-dark);
   transform: translateY(-2px);
@@ -215,6 +287,7 @@ ul, ol {
   color: var(--color-primary);
   background: transparent;
 }
+
 .btn-outline:hover {
   background-color: var(--color-primary);
   color: #fff;
@@ -224,6 +297,7 @@ ul, ol {
   background-color: #25D366;
   color: #fff;
 }
+
 .btn-whatsapp:hover {
   background-color: #1DAE52;
   transform: translateY(-2px);
@@ -260,13 +334,29 @@ ul, ol {
 
 /* Responsive helpers */
 @media (max-width: 768px) {
-  .heading-xl { font-size: var(--text-4xl); }
-  .heading-lg { font-size: var(--text-3xl); }
-  .heading-md { font-size: var(--text-2xl); }
-  .section { padding-block: var(--space-16); }
+  .heading-xl {
+    font-size: var(--text-4xl);
+  }
+
+  .heading-lg {
+    font-size: var(--text-3xl);
+  }
+
+  .heading-md {
+    font-size: var(--text-2xl);
+  }
+
+  .section {
+    padding-block: var(--space-16);
+  }
 }
 
 @media (max-width: 480px) {
-  .heading-xl { font-size: var(--text-3xl); }
-  .heading-lg { font-size: var(--text-2xl); }
+  .heading-xl {
+    font-size: var(--text-3xl);
+  }
+
+  .heading-lg {
+    font-size: var(--text-2xl);
+  }
 }
