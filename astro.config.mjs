@@ -1,8 +1,8 @@
 import { defineConfig } from 'astro/config';
-import netlify from '@astrojs/netlify';
 
+// Sitio 100% estático. El único backend es el asistente Empaquecito, que vive como
+// Netlify Function en netlify/functions/empaquecito.js — por eso no hace falta adaptador
+// ni `output: 'hybrid'`.
 export default defineConfig({
-  output: 'hybrid',
-  adapter: netlify(),
   site: 'https://centroempaque.netlify.app',
 });

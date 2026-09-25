@@ -1,8 +1,8 @@
 ---
 // src/pages/contacto.astro
 import Layout from '../layouts/Layout.astro';
+import { WA_NUMBER } from '../data/sitio.js';
 
-const WA_NUMBER  = '59898024132';
 const WA_MESSAGE = 'Hola Centro Empaque! Quiero hacer una consulta 😊';
 const waLink     = `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(WA_MESSAGE)}`;
 

@@ -2,13 +2,13 @@
 import Layout from '../layouts/Layout.astro';
 import ProductCard from '../components/ProductCard.astro';
 import { getCollection } from 'astro:content';
+import { WA_NUMBER } from '../data/sitio.js';
 
 const todos = await getCollection('productos', ({ data }) => data.activo);
 const productosDestacados = todos
   .sort((a, b) => a.data.orden - b.data.orden)
   .slice(0, 4);
 
-const WA_NUMBER = '59898024132';
 const waLink    = `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent('Hola! Quiero consultar sobre sus productos 😊')}`;
 ---
 

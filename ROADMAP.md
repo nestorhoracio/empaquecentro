@@ -1,7 +1,7 @@
 # Roadmap — Centro Empaque
 
 > Documento vivo — actualizar al final de cada sesión de trabajo.
-> Última actualización: 2026-06-04
+> Última actualización: 2026-09-24
 
 ## Hecho
 
@@ -20,7 +20,7 @@
 
 **Fase 3 — IA y Funcionalidades Inteligentes**
 - `EmpaquecitoBubble.astro` (chat flotante global) + `AsesorIA.astro` (chat embebido)
-- Endpoint seguro `src/pages/api/empaquecito.ts`, prompt calibrado con el catálogo real
+- Endpoint protegido `netlify/functions/empaquecito.js` (origen, validación, rate limit nativo), prompt calibrado con el catálogo real
 - Botón de WhatsApp con mensaje prellenado
 - Kits contextuales — `window.Empaquecito.openWithContext()`
 - Escalada a humano (detecta frases clave, abre WhatsApp con historial resumido)
@@ -35,7 +35,8 @@
 
 - Avatar real de Empaquecito (mascota) — pendiente de que el CM entregue el asset
 - Test con usuarios reales una vez estén los assets definitivos
-- ⚠️ **`WA_NUMBER` sin unificar realmente**: el changelog daba esto por cerrado, pero el código muestra lo contrario — `kits.astro`, `EmpaquecitoBubble.astro` y `AsesorIA.astro` tienen el número real (`59899474094`); `Header.astro`, `Footer.astro`, `WhatsAppButton.astro`, `ProductCard.astro`, `index.astro` y `contacto.astro` siguen con el placeholder (`59898024132`). Revisar y unificar.
+- **Número de WhatsApp real del cliente**: hoy `src/data/sitio.js` tiene el placeholder `59898024132`. Se reemplaza esa única línea cuando el cliente apruebe y lo confirme.
+- **Pendiente de verificar en producción**: el rate limit de `/api/empaquecito` (solo se activa en un deploy real) y que el chat responda en `centroempaque.netlify.app` después del cambio a Netlify Function.
 - Conocido, no bloqueante: el reset de contraseña por email no funciona en el plan gratuito de Netlify Identity
 
 ## Próximo
@@ -51,6 +52,7 @@
 
 ## Changelog
 
+- **2026-09-24** — Endpoint de Empaquecito protegido: pasó de API route de Astro (`output: 'hybrid'` + `@astrojs/netlify`) a Netlify Function v2 con validación de origen, forma y largo del historial, errores genéricos y rate limit nativo; el sitio queda 100% estático. `WA_NUMBER` unificado en `src/data/sitio.js` (placeholder `59898024132`); se sacó el número personal de NH, que había quedado de las pruebas en `kits.astro`, `EmpaquecitoBubble.astro` y `AsesorIA.astro`.
 - **2026-06-04** — Logo SVG real (paths vectoriales del original), `logo-white.svg` con esquinas redondeadas, fondo verde agua, SEO movido a Fase 5 (post-aprobación cliente + dominio)
 - **2026-06-02** — Kits contextuales (se sacó `<AsesorIA />` de `/kits`), escalada a humano, reset por inactividad (5 min), bug del `catch` en `AsesorIA.astro` corregido
 - **2026-06-01** — Fix de Netlify Identity: los links de invitación no respetaban el token; resuelto con redirect en `Layout.astro` + script del widget en `public/admin/index.html`
@@ -61,4 +63,5 @@
 - CMS: Decap CMS (Git-based, sin costo) — sin cuenta externa necesaria
 - `KitBuilder.astro` no se implementó como componente — lógica en `kits.astro` + `EmpaquecitoBubble.astro`
 - Tipografía servida en local (woff2) — sin dependencia externa, mejor performance y privacidad
-- `WA_NUMBER` hardcodeado por componente en vez de config central (ver inconsistencia pendiente arriba)
+- ~~`WA_NUMBER` hardcodeado por componente en vez de config central~~ — revertida el 2026-09-24 porque terminó con dos números distintos publicados a la vez: ahora vive solo en `src/data/sitio.js`
+- **Asistente como Netlify Function v2, no API route de Astro** (2026-09-24) — el rate limit nativo de Netlify solo existe para Netlify Functions; de paso el sitio queda estático. Costo aceptado: `npm run dev` ya no sirve el chat, hace falta `netlify dev`

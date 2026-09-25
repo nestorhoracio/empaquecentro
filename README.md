@@ -35,12 +35,35 @@ npm run dev
 
 El sitio queda disponible en `http://localhost:4321` con hot-reload.
 
+> `npm run dev` no sirve el asistente: Empaquecito es una Netlify Function
+> (`netlify/functions/empaquecito.js`, publicada en `/api/empaquecito`). Para probar el chat en
+> local usar `npx netlify dev`, que levanta el sitio y la function juntos y lee el `.env`. El rate
+> limit de la function solo se activa en un deploy real.
+
 Otros comandos:
 
 ```bash
 npm run build     # genera dist/
 npm run preview   # vista previa del build de producción
+npx netlify dev   # sitio + asistente en local
 ```
+
+## Cómo funciona Empaquecito por dentro
+
+El sitio es 100% estático. El único backend es `netlify/functions/empaquecito.js`, al que llaman
+`AsesorIA.astro` y `EmpaquecitoBubble.astro`. Antes de llamar a Claude (Haiku 4.5, vía `fetch`
+directo a la API) la function:
+
+1. Rechaza pedidos que vengan de otro sitio (`Origin`/`Referer` fuera del dominio del proyecto,
+   `*.netlify.app` o localhost) → 403.
+2. Valida el historial: tiene que ser una lista de mensajes `user`/`assistant` con texto; se queda
+   con los últimos 20 y corta cada uno a 2000 caracteres → 400 si no cumple.
+3. Devuelve al navegador solo el texto de la respuesta, y errores genéricos si algo falla.
+
+Además, Netlify limita el endpoint a 15 consultas cada 3 minutos por IP (`config.rateLimit`); al
+pasarse, el chat avisa que hay que esperar un par de minutos.
+
+El número de WhatsApp de todos los botones sale de `src/data/sitio.js`.
 
 ## Variables de entorno
 
