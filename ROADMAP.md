@@ -36,7 +36,6 @@
 - Avatar real de Empaquecito (mascota) — pendiente de que el CM entregue el asset
 - Test con usuarios reales una vez estén los assets definitivos
 - **Número de WhatsApp real del cliente**: hoy `src/data/sitio.js` tiene el placeholder `59898024132`. Se reemplaza esa única línea cuando el cliente apruebe y lo confirme.
-- **Pendiente de verificar en producción**: el rate limit de `/api/empaquecito` (solo se activa en un deploy real) y que el chat responda en `centroempaque.netlify.app` después del cambio a Netlify Function.
 - Conocido, no bloqueante: el reset de contraseña por email no funciona en el plan gratuito de Netlify Identity
 
 ## Próximo
@@ -52,7 +51,7 @@
 
 ## Changelog
 
-- **2026-09-24** — Endpoint de Empaquecito protegido: pasó de API route de Astro (`output: 'hybrid'` + `@astrojs/netlify`) a Netlify Function v2 con validación de origen, forma y largo del historial, errores genéricos y rate limit nativo; el sitio queda 100% estático. `WA_NUMBER` unificado en `src/data/sitio.js` (placeholder `59898024132`); se sacó el número personal de NH, que había quedado de las pruebas en `kits.astro`, `EmpaquecitoBubble.astro` y `AsesorIA.astro`.
+- **2026-09-24** — Endpoint de Empaquecito protegido: pasó de API route de Astro (`output: 'hybrid'` + `@astrojs/netlify`) a Netlify Function v2 con validación de origen, forma y largo del historial, errores genéricos y rate limit nativo; el sitio queda 100% estático. `WA_NUMBER` unificado en `src/data/sitio.js` (placeholder `59898024132`); se sacó el número personal de NH, que había quedado de las pruebas en `kits.astro`, `EmpaquecitoBubble.astro` y `AsesorIA.astro`. Verificado en producción el mismo día: chat respondiendo, origen ajeno bloqueado (403) y rate limit activo (429 después del umbral, con la demora de hasta 10 s que documenta Netlify).
 - **2026-06-04** — Logo SVG real (paths vectoriales del original), `logo-white.svg` con esquinas redondeadas, fondo verde agua, SEO movido a Fase 5 (post-aprobación cliente + dominio)
 - **2026-06-02** — Kits contextuales (se sacó `<AsesorIA />` de `/kits`), escalada a humano, reset por inactividad (5 min), bug del `catch` en `AsesorIA.astro` corregido
 - **2026-06-01** — Fix de Netlify Identity: los links de invitación no respetaban el token; resuelto con redirect en `Layout.astro` + script del widget en `public/admin/index.html`
